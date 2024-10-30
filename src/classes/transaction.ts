@@ -1,8 +1,8 @@
 import { TimeStep } from "../types/all";
 
 class Transaction {
-  action: string;
   step: TimeStep;
+  action: string;
 
   constructor(action: string, step: TimeStep) {
     this.action = action;

@@ -1,46 +1,60 @@
+import { TimeStep } from "../types/all";
+
+// classes
+import Statistics from "./statistics";
+import Transaction from "./transaction";
+
 // Simulator class with actions
-interface Simulator {
-  timeframe: any[];
-  balance: number;
-  holdings: number;
+interface ISimulator {
+  timeframe: TimeStep[];
+  timestep: number;
+  transactions: Transaction[];
+  statistics: Statistics;
 }
 
-class Simulator implements Simulator {
-  balance: number;
-  holdings: number;
-  timeframe: any[];
+class Simulator implements ISimulator {
+  timeframe: TimeStep[];
+  timestep: number;
+  statistics: Statistics;
+  transactions: Transaction[];
 
-  constructor(timeframe: any[]) {
+  constructor(timeframe: TimeStep[], statistics: Statistics) {
     this.timeframe = timeframe;
-    this.balance = 10000; // Starting balance
-    this.holdings = 0; // Number of shares held
-  }
-
-  // Decide action: buy, sell, or hold
-  decideAction(event: any): string {
-    // Simple logic: buy if price is low, sell if high, else hold
-    if (event.price < 50) return "buy";
-    else if (event.price > 100) return "sell";
-    else return "hold";
+    this.timestep = 0; // Current timestep
+    this.statistics = statistics;
+    this.transactions = [];
   }
 
   // Process transaction based on action
-  processTransaction(action: string, event: any) {
-    const amount = 10; // Fixed amount per transaction for simplicity
+  process(action: string, step: TimeStep) {
+    // implement the logic for processing transactions
 
-    if (action === "buy" && this.balance >= event.price * amount) {
-      this.balance -= event.price * amount;
-      this.holdings += amount;
-      console.log(
-        `Bought ${amount} at $${event.price}, new balance: $${this.balance}`
-      );
-    } else if (action === "sell" && this.holdings >= amount) {
-      this.balance += event.price * amount;
-      this.holdings -= amount;
-      console.log(
-        `Sold ${amount} at $${event.price}, new balance: $${this.balance}`
-      );
-    }
+    return new Transaction(action, step);
+  }
+
+  decide(step: TimeStep) {
+    // implement the logic for deciding on the action
+    const resolved = "buy";
+    return resolved;
+  }
+
+  simulate() {
+    // Loop through each timestep
+    this.timeframe.forEach((step) => {
+      const action =  this.decide(step);
+      const transaction = this.process(action, step);
+
+      // Handle the transaction
+      this.transactions.push(transaction);
+      this.statistics.handleTransaction(transaction);
+
+      // runtime profit check
+      console.log(this.statistics.profit);
+    });
+
+    // Display the fianl simulation results
+    console.table(this.statistics.getStatistics());
+    console.log(this.transactions);
   }
 }
 
