@@ -26,30 +26,27 @@ class Simulator implements ISimulator {
   }
 
   // Process transaction based on action
-  process(action: string, step: TimeStep) {
+  process(action: string, size: number, step: TimeStep) {
     // implement the logic for processing transactions
-
-    return new Transaction(action, step);
+    let gain = action === "buy" ? -size : size;
+    return new Transaction(action, gain, step);
   }
 
   decide(step: TimeStep) {
     // implement the logic for deciding on the action
-    const resolved = "buy";
-    return resolved;
+    const resolved = Math.random() > 0.5 ? "buy" : "sell";
+    return { action: resolved, size: 10 };
   }
 
   simulate() {
     // Loop through each timestep
     this.timeframe.forEach((step) => {
-      const action =  this.decide(step);
-      const transaction = this.process(action, step);
+      const { action, size } = this.decide(step);
+      const transaction = this.process(action, size, step);
 
       // Handle the transaction
       this.transactions.push(transaction);
       this.statistics.handleTransaction(transaction);
-
-      // runtime profit check
-      console.log(this.statistics.profit);
     });
 
     // Display the fianl simulation results
