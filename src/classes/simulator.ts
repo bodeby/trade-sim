@@ -44,47 +44,4 @@ class Simulator implements Simulator {
   }
 }
 
-// Statistics class for tracking performance
-class Statistics {
-  trades: number;
-  profit: number;
-
-  constructor() {
-    this.trades = 0;
-    this.profit = 0;
-  }
-
-  updateStats(action: string, profit: number) {
-    if (action === "buy" || action === "sell") this.trades += 1;
-    this.profit += profit;
-  }
-
-  printStats() {
-    console.log(`Total Trades: ${this.trades}, Net Profit: $${this.profit}`);
-  }
-}
-
-// Event Loop
-const eventLoop = (sim: Simulator, stats: Statistics) => {
-  sim.timeframe.forEach((event) => {
-    const action = sim.decideAction(event);
-    sim.processTransaction(action, event);
-
-    // Could calculate and update stats here
-    if (action === "sell") stats.updateStats(action, sim.balance);
-  });
-
-  stats.printStats(); // Print final statistics after loop
-};
-
-// Sample timeframe data
-const timeframe = [{ price: 40 }, { price: 60 }, { price: 120 }, { price: 80 }];
-
-// Main setup
-const main = () => {
-  const sim = new Simulator(timeframe);
-  const stats = new Statistics();
-  eventLoop(sim, stats);
-};
-
-main();
+export default Simulator;
