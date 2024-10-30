@@ -15,7 +15,7 @@ const statistics = new Statistics(5_000);
 const simulator = new Simulator(timeframe, statistics);
 
 // test process method
-test("process method should return a transaction", () => {
+test("process method test", () => {
   const transaction_test = simulator.process("buy", 10, timeframe[0]);
   const transaction_true = new Transaction("buy", 10, timeframe[0]);
 
@@ -24,8 +24,10 @@ test("process method should return a transaction", () => {
 });
 
 // test decide method
-test("decide method should return an action and size", () => {
+test("decide method test", () => {
   // Act
   const decision = simulator.decide(timeframe[0]);
+
+  // Assert
   expect(1 + 2).toBe(3);
 });
