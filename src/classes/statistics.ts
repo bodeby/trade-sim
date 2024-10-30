@@ -1,20 +1,30 @@
 // Statistics class for tracking performance
+import Transaction from "./transaction";
+
 class Statistics {
+  balance: number;
   trades: number;
   profit: number;
 
-  constructor() {
+  constructor(balance: number = 1000) {
+    this.balance = balance;
     this.trades = 0;
     this.profit = 0;
   }
 
-  updateStats(action: string, profit: number) {
+  // New method to handle transactions
+  handleTransaction(transaction: Transaction) {
+    const { action, step } = transaction;
     if (action === "buy" || action === "sell") this.trades += 1;
-    this.profit += profit;
+    this.profit += 0;
   }
 
-  printStats() {
-    console.log(`Total Trades: ${this.trades}, Net Profit: $${this.profit}`);
+  getStatistics() {
+    return {
+      balance: this.balance,
+      trades: this.trades,
+      profit: this.profit,
+    };
   }
 }
 
